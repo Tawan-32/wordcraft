@@ -29,7 +29,7 @@ jobs:
           find . -name "*.wasm" -not -path "./target/*" | head -20
       - uses: actions/upload-pages-artifact@v3
         with:
-              path: dist/web
+                        path: dist/web
   deploy:
     needs: build
     runs-on: ubuntu-latest
