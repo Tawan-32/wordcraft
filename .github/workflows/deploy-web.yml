@@ -22,6 +22,11 @@ jobs:
       - name: Build web
         working-directory: apps/wordcraft-web
         run: trunk build --release --public-url "/${{ github.event.repository.name }}/"
+      - name: Show output
+        run: |
+          ls -la apps/wordcraft-web
+          find . -name "index.html" -not -path "./target/*" -not -path "*/node_modules/*" | head -20
+          find . -name "*.wasm" -not -path "./target/*" | head -20
       - uses: actions/upload-pages-artifact@v3
         with:
           path: apps/wordcraft-web/dist
