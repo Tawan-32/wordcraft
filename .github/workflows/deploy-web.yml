@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: storytold/craft-fonts
+          path: craft-fonts
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
@@ -21,15 +25,12 @@ jobs:
           tool: trunk
       - name: Build web
         working-directory: apps/wordcraft-web
+        env:
+          CRAFT_FONTS_DIR: ${{ github.workspace }}/craft-fonts
         run: trunk build --release --public-url "/${{ github.event.repository.name }}/"
-      - name: Show output
-        run: |
-          ls -la apps/wordcraft-web
-          find . -name "index.html" -not -path "./target/*" -not -path "*/node_modules/*" | head -20
-          find . -name "*.wasm" -not -path "./target/*" | head -20
       - uses: actions/upload-pages-artifact@v3
         with:
-                        path: dist/web
+          path: dist/web
   deploy:
     needs: build
     runs-on: ubuntu-latest
