@@ -16,30 +16,6 @@ jobs:
         with:
           repository: storytold/craft-fonts
           path: craft-fonts
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: wasm32-unknown-unknown
-      - uses: Swatinem/rust-cache@v2
-      - uses: taiki-e/install-action@v2
-        with:
-          tool: trunk
-      - name: Build web
-        working-directory: apps/wordcraft-web
-        env:
-          CRAFT_FONTS_DIR: ${{ github.workspace }}/craft-fonts
-        run: trunk build --release --public-url "/${{ github.event.repository.name }}/"
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist/web
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
       - name: Add Thai fonts
         run: |
           mkdir -p craft-fonts/fonts/thai
@@ -63,3 +39,13 @@ jobs:
           with open("craft-fonts/fonts/manifest.txt", "a", encoding="utf-8") as m:
               m.write("\n" + "\n".join(lines) + "\n")
           PY
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: trunk
+      - name: Build web
+        working-directory: apps/wordcraft-web
+        env:
