@@ -2079,7 +2079,7 @@ fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Optio
                 lab.x += shift;
             }
         }
-        let justify = display.is_none() && ((rp.align == Align::Justify && end == LineEnd::Wrap) || rp.align == Align::Distribute);
+        let justify = display.is_none() && ((rp.align == Align::Justify && end == LineEnd::Wrap) || matches!(rp.align, Align::Distribute | Align::ThaiDistribute));
         // A line that only fits with shrunk spaces is shrunk, the last line of the paragraph too.
         let shrink = display.is_none() && shrink_spaces && slack < 0.0 && last_tab.is_none();
         if shrink {
@@ -2091,9 +2091,9 @@ fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Optio
                     pl.clusters.get(*k).is_some_and(|c| c.kind == ClKind::Space) && xs.get(k - c0).copied().unwrap_or(f32::MAX) < content_end - 0.01
                 })
                 .collect();
-            if rp.align == Align::Distribute || spaces.is_empty() {
+            if matches!(rp.align, Align::Distribute | Align::ThaiDistribute) || spaces.is_empty() {
                 let cnt = (c1 - align_from).saturating_sub(1).max(1) as f32;
-                if rp.align == Align::Distribute {
+                if matches!(rp.align, Align::Distribute | Align::ThaiDistribute) {
                     let per = slack / cnt;
                     for (q, v) in xs.iter_mut().enumerate().skip(align_from - c0) {
                         let k = (q + c0 - align_from) as f32;
