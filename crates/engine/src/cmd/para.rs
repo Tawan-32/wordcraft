@@ -17,6 +17,7 @@ pub fn specs() -> Vec<CommandSpec> {
         CommandSpec::new("para.alignRight", "Align Right", "Home › Paragraph", |s, _| align(s, Align::Right)).key("Mod+R"),
         CommandSpec::new("para.justify", "Justify", "Home › Paragraph", |s, _| align(s, Align::Justify)).key("Mod+J"),
         CommandSpec::new("para.distribute", "Distributed", "Home › Paragraph", |s, _| align(s, Align::Distribute)).key("Mod+Shift+J"),
+        CommandSpec::new("para.thaiDistribute", "Thai Distributed", "Home > Paragraph", |s, _| align(s, Align::ThaiDistribute)),
         CommandSpec::new("para.align", "Alignment", "Home › Paragraph", |s, v| {
             let a = match p::req_str(v, "value")? {
                 "left" => Align::Left,
@@ -24,6 +25,7 @@ pub fn specs() -> Vec<CommandSpec> {
                 "right" => Align::Right,
                 "justify" | "both" => Align::Justify,
                 "distribute" => Align::Distribute,
+                "thaiDistribute" => Align::ThaiDistribute,
                 // Logical edges, whatever the paragraph's direction.
                 "start" => return fmt(s, &|p| p.align = Some(Align::Left)),
                 "end" => return fmt(s, &|p| p.align = Some(Align::Right)),
@@ -354,6 +356,7 @@ fn set_props(s: &mut Session, v: &Value) -> CmdResult {
         Some("right") => Some(Align::Right),
         Some("justify" | "both") => Some(Align::Justify),
         Some("distribute") => Some(Align::Distribute),
+        Some("thaiDistribute") => Some(Align::ThaiDistribute),
         Some(x) => return Err(CmdError::Params(format!("unknown alignment `{x}`"))),
     };
     let indent = |k: &str| p::f32(&page, k).map(|x| x.clamp(-1584.0, 1584.0));
