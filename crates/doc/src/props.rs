@@ -485,6 +485,7 @@ pub enum Align {
     Right,
     Justify,
     Distribute,
+    ThaiDistribute,
 }
 
 impl Align {
