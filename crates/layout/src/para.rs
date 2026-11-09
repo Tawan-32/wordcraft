@@ -2079,7 +2079,7 @@ fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Optio
                 lab.x += shift;
             }
         }
-        let justify = display.is_none() && ((rp.align == Align::Justify && end == LineEnd::Wrap) || matches!(rp.align, Align::Distribute | Align::ThaiDistribute));;
+        let justify = display.is_none() && ((rp.align == Align::Justify && end == LineEnd::Wrap) || rp.align == Align::Distribute || (rp.align == Align::ThaiDistribute && matches!(end, LineEnd::Wrap | LineEnd::LineBreak)));
         // A line that only fits with shrunk spaces is shrunk, the last line of the paragraph too.
         let shrink = display.is_none() && shrink_spaces && slack < 0.0 && last_tab.is_none();
         if shrink {
